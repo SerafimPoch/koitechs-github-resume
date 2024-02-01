@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   HomeContainer,
@@ -10,7 +11,8 @@ import {
   HomeFormWrapper,
   HomeImageWrapper,
   HomeTitle,
-} from "./Home.styles";
+} from "./styles";
+import { useGitHubUser } from "./api";
 
 const FormField = dynamic(
   () => import("./ui/FormField").then((mod) => mod.FormField),
@@ -21,6 +23,8 @@ const FormField = dynamic(
 
 export default function Home() {
   const router = useRouter();
+  const [username, setUsername] = useState("");
+  const { data, isLoading, refetch, isError } = useGitHubUser(username);
 
   const handleSubmit = (values: any) => {
     const githubUsername = values.githubUsername;
@@ -49,7 +53,7 @@ export default function Home() {
         </HomeDescription>
       </HomeContent>
       <HomeFormWrapper>
-        <FormField handleSubmit={handleSubmit} />
+        <FormField handleSubmit={handleSubmit} isLoading={isLoading} />
       </HomeFormWrapper>
     </HomeContainer>
   );

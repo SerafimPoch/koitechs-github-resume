@@ -1,8 +1,13 @@
 import { Button, Form, Input, Space } from "antd";
 
-export default function FormField({ handleSubmit }: any) {
+interface TFormField {
+  handleSubmit: (values: any) => void;
+  isLoading: boolean;
+}
+
+export default function FormField({ handleSubmit, isLoading }: TFormField) {
   return (
-    <Form onFinish={handleSubmit}>
+    <Form onFinish={(values) => handleSubmit(values)}>
       <Space direction="horizontal" align="baseline">
         <Form.Item
           name="githubUsername"
@@ -13,7 +18,7 @@ export default function FormField({ handleSubmit }: any) {
           <Input placeholder="GitHub Username" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={isLoading}>
             Create
           </Button>
         </Form.Item>

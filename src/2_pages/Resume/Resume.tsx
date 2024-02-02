@@ -12,9 +12,13 @@ import {
   ResumeContainer,
   ResumeBasicInfoWrapper,
   ResumeNameText,
+  ResumeGithubCardsWrapper,
+  ResumeChartWrapper,
+  ResumeChartMobileWrapper,
 } from "./styles";
 import { useGitHubRepos } from "./api";
 import { transformReposToChartData } from "./model";
+import RepositoryCard from "./ui/RepositoryCard";
 
 const LangChart = dynamic(
   () => import("@/5_entities/LangChart").then((mod) => mod.LangChart),
@@ -57,22 +61,53 @@ export default function Resume() {
     [repos]
   );
 
+  const reposCardsData = useMemo(
+    () =>
+      repos?.map(({ name, htmlUrl, description, updatedAt }) => ({
+        name,
+        htmlUrl,
+        description,
+        updatedAt,
+      })),
+    [repos]
+  );
+
+  console.log(chartData);
+
   return (
     <ResumeContainer>
-      {isLoading ? (
+      {accountError ? (
+        <WrongUsername />
+      ) : isLoading ? (
         <LoaderSpinner />
       ) : (
-        <ResumeBasicInfoWrapper>
-          <Image src={avatarUrl} height={100} width={100} alt="avatar" />
-          <ResumeNameText>
-            {account?.name} <br />
-            Member since: {membershipDate} <br />
-            Public repositories: {account?.publicRepos || 0}
-            <br />
-            Location: {account?.location}
-          </ResumeNameText>
-          <LangChart data={chartData} />
-        </ResumeBasicInfoWrapper>
+        <>
+          <ResumeBasicInfoWrapper>
+            <Image src={avatarUrl} height={100} width={100} alt="avatar" />
+            <ResumeNameText>
+              {account?.name} <br />
+              Member since: {membershipDate} <br />
+              Public repositories: {account?.publicRepos || 0}
+              <br />
+              Location: {account?.location}
+            </ResumeNameText>
+          </ResumeBasicInfoWrapper>
+          <ResumeChartWrapper>
+            <LangChart data={chartData} />
+          </ResumeChartWrapper>
+          <ResumeChartMobileWrapper>
+            {chartData.map(({ name, value }) => (
+              <p key={name}>
+                {name} repositories: {value}
+              </p>
+            ))}
+          </ResumeChartMobileWrapper>
+          <ResumeGithubCardsWrapper>
+            {reposCardsData?.map((e) => (
+              <RepositoryCard key={e.name} data={e} />
+            ))}
+          </ResumeGithubCardsWrapper>
+        </>
       )}
     </ResumeContainer>
   );

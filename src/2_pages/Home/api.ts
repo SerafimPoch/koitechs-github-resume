@@ -13,9 +13,11 @@ export const useGitHubUser = (username: string | null) => {
         `https://api.github.com/users/${username}`
       );
       const camelizedData = humps.camelizeKeys(data) as GitHubUser;
+      const response = githubUserSchema.safeParse(camelizedData);
 
-      if (!githubUserSchema.safeParse(camelizedData).success) {
+      if (!response.success) {
         console.log("Invalid GitHub user api response structure");
+
         return {} as GitHubUser;
       }
 

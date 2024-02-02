@@ -1,17 +1,17 @@
 import { useQuery } from "react-query";
 import axios from "redaxios";
 import humps from "humps";
-import { GitHubRepo, repoSchema } from "./types";
 import { z } from "zod";
+import { GitHubRepo, repoSchema } from "./types";
 
 export const useGitHubRepos = (username: string | null) => {
-  return useQuery<GitHubRepo[], Error>( // Обратите внимание на GitHubRepo[]
+  return useQuery<GitHubRepo[], Error>(
     ["githubRepos", username],
     async () => {
       if (!username) return [];
 
       const { data } = await axios.get(
-        `https://api.github.com/users/${username}/repos`
+        `https://api.github.com/users/${username}/repos?sort=updated`
       );
       const camelizedData = humps.camelizeKeys(data);
 

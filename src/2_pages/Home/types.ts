@@ -1,0 +1,38 @@
+import { z } from "zod";
+
+export const githubUserSchema = z.object({
+  login: z.string().nullable(),
+  id: z.number().nullable(),
+  nodeId: z.string().nullable(),
+  avatarUrl: z.string().nullable(),
+  gravatarId: z.string().nullable(),
+  url: z.string().nullable(),
+  htmlUrl: z.string().nullable(),
+  followersUrl: z.string().nullable(),
+  followingUrl: z.string().nullable(),
+  gistsUrl: z.string().nullable(),
+  starredUrl: z.string().nullable(),
+  subscriptionsUrl: z.string().nullable(),
+  organizationsUrl: z.string().nullable(),
+  reposUrl: z.string().nullable(),
+  eventsUrl: z.string().nullable(),
+  receivedEventsUrl: z.string().nullable(),
+  type: z.string().nullable(),
+  siteAdmin: z.boolean().nullable(),
+  name: z.string().nullable(),
+  company: z.string().nullable(),
+  blog: z.string().nullable(),
+  location: z.string().nullable(),
+  email: z.string().nullable(),
+  hireable: z.boolean().nullable(),
+  bio: z.string().nullable(),
+  twitterUsername: z.string().nullable(),
+  publicRepos: z.number().nullable(),
+  publicGists: z.number().nullable(),
+  followers: z.number().nullable(),
+  following: z.number().nullable(),
+  createdAt: z.string().nullable(),
+  updatedAt: z.string().nullable(),
+});
+
+export type GitHubUser = z.infer<typeof githubUserSchema>;

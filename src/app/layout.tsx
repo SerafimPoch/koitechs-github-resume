@@ -1,6 +1,5 @@
 "use client";
 
-import type { Metadata } from "next";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Inter } from "next/font/google";
 import "./globals.css";

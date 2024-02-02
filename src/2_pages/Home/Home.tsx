@@ -1,9 +1,9 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FormField } from "./ui/FormField";
 import {
   HomeContainer,
   HomeContent,
@@ -11,26 +11,25 @@ import {
   HomeFormWrapper,
   HomeImageWrapper,
   HomeTitle,
+  HomeErrorText,
 } from "./styles";
 import { useGitHubUser } from "./api";
-
-const FormField = dynamic(
-  () => import("./ui/FormField").then((mod) => mod.FormField),
-  {
-    ssr: false,
-  }
-);
 
 export default function Home() {
   const router = useRouter();
   const [username, setUsername] = useState("");
-  const { data, isLoading, refetch, isError } = useGitHubUser(username);
+  const { isLoading, isError, isFetching } = useGitHubUser(username);
 
   const handleSubmit = (values: any) => {
     const githubUsername = values.githubUsername;
-
-    router.push(`/${githubUsername}`);
+    setUsername(githubUsername);
   };
+
+  useEffect(() => {
+    if (!isLoading && !isError) {
+      router.push(`/${username}`);
+    }
+  }, [isLoading, isError, username, router]);
 
   return (
     <HomeContainer>
@@ -53,7 +52,11 @@ export default function Home() {
         </HomeDescription>
       </HomeContent>
       <HomeFormWrapper>
-        <FormField handleSubmit={handleSubmit} isLoading={isLoading} />
+        <FormField
+          handleSubmit={handleSubmit}
+          isLoading={isLoading || isFetching}
+        />
+        <HomeErrorText>{isError && "Wrong username"}</HomeErrorText>
       </HomeFormWrapper>
     </HomeContainer>
   );

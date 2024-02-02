@@ -1,13 +1,12 @@
+"use client";
+
 import type { Metadata } from "next";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Koitechs github resume",
-  description: "A simple app that displays github account information",
-};
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
@@ -16,7 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
+      </body>
     </html>
   );
 }

@@ -2,6 +2,7 @@ import axios from "redaxios";
 import { useQuery } from "react-query";
 import humps from "humps";
 import { GitHubUser, githubUserSchema } from "./types";
+import { BASIC_API_PATH } from "@/6_shared/constants";
 
 export const useGitHubUser = (username: string | null) => {
   return useQuery<GitHubUser>(
@@ -9,9 +10,7 @@ export const useGitHubUser = (username: string | null) => {
     async () => {
       if (!username) return {} as GitHubUser;
 
-      const { data } = await axios.get(
-        `https://api.github.com/users/${username}`
-      );
+      const { data } = await axios.get(`${BASIC_API_PATH}/users/${username}`);
       const camelizedData = humps.camelizeKeys(data) as GitHubUser;
       const response = githubUserSchema.safeParse(camelizedData);
 

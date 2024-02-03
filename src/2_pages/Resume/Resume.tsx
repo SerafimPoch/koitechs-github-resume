@@ -37,10 +37,7 @@ export default function Resume() {
 
   const { data: repos, isLoading: reposLoading } = useGitHubRepos(username);
 
-  const isLoading = useMemo(
-    () => accountLoading && reposLoading,
-    [accountLoading, reposLoading]
-  );
+  const isLoading = accountLoading && reposLoading;
 
   const avatarUrl = useMemo(
     () => account?.avatarUrl || "/default-avatar.png",
@@ -72,13 +69,11 @@ export default function Resume() {
     [repos]
   );
 
-  console.log(chartData);
+  if (accountError) return <WrongUsername />;
 
   return (
     <ResumeContainer>
-      {accountError ? (
-        <WrongUsername />
-      ) : isLoading ? (
+      {isLoading ? (
         <LoaderSpinner />
       ) : (
         <>

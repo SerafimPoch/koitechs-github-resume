@@ -3,6 +3,7 @@ import axios from "redaxios";
 import humps from "humps";
 import { z } from "zod";
 import { GitHubRepo, repoSchema } from "./types";
+import { BASIC_API_PATH } from "@/6_shared/constants";
 
 export const useGitHubRepos = (username: string | null) => {
   return useQuery<GitHubRepo[], Error>(
@@ -11,7 +12,7 @@ export const useGitHubRepos = (username: string | null) => {
       if (!username) return [];
 
       const { data } = await axios.get(
-        `https://api.github.com/users/${username}/repos?sort=updated`
+        `${BASIC_API_PATH}/users/${username}/repos?sort=updated`
       );
       const camelizedData = humps.camelizeKeys(data);
 
